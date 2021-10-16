@@ -1,8 +1,11 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .models import Note
+from .serializers import NoteSerializer
 
 
+@api_view(['GET'])
 def get_routes(request):
     routes = [
         {
@@ -36,4 +39,27 @@ def get_routes(request):
             'description': 'Deletes and exiting note'
         },
     ]
-    return JsonResponse(routes, safe=False)
+    return Response(routes)
+
+
+@api_view(['GET'])
+def get_notes(request):
+    qs = Note.objects.all()
+    serializer = NoteSerializer(qs, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_note(request, pk):
+    qs = Note.objects.get(id=pk)
+    serializer = NoteSerializer(qs)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def post_notes(request):
+    serializer = NoteSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(status.HTTP_400_BAD_REQUEST)
