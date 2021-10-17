@@ -57,7 +57,7 @@ def get_note(request, pk):
 
 
 @api_view(['POST'])
-def post_notes(request):
+def create_note(request):
     serializer = NoteSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
