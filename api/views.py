@@ -44,7 +44,7 @@ def get_routes(request):
 
 @api_view(['GET'])
 def get_notes(request):
-    qs = Note.objects.all()
+    qs = Note.objects.all().order_by('-updated')
     serializer = NoteSerializer(qs, many=True)
     return Response(serializer.data)
 
@@ -63,3 +63,15 @@ def post_notes(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def update_note(request, pk):
+    data = request.data
+    note = Note.objects.get(id=pk)
+    serializer = NoteSerializer(instance=note, data=data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
