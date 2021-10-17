@@ -75,3 +75,11 @@ def update_note(request, pk):
         serializer.save()
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['DELETE'])
+def delete_note(request, pk):
+    note = Note.objects.get(id=pk)
+    note.delete()
+
+    return Response("Note deleted", status=status.HTTP_204_NO_CONTENT)
