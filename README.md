@@ -5,7 +5,7 @@ The purpose of this repo is to apply some of my studies, currently is just a CRU
 
 The next updates probably will include:
 
-- [ ] To use class based views instead of functions
+- [x] To use class based views instead of functions
 - [ ] Create a dockerfile
 - [ ] Make some note features to both front and backend
 - [ ] Add fixtures
